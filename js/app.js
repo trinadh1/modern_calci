@@ -16,7 +16,7 @@ Calci = {
   },
   deleteCharFromPreview: function() {
     var preview = $('#result').html();
-    $('#result').html(preview.slice(0, preview.length-1));
+    $('#result').html(preview.slice(0, preview.length-1));0
   },
   calculateResult: function() {
     var result = eval($('#result').html()) + '';
