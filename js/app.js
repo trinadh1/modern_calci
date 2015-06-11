@@ -1,39 +1,122 @@
-
 Calci = {
-
-  clearPreview: function() {
-    $('#preview').html("");
+  constants: {
+    ac: "AC",
+    del: "DEL",
+    eql: "EQL",
+    plus: "PLUS",
+    minus: "MINUS",
+    division: "DIVISION",
+    multiply: "MULTIPLY",
+    dot: "DOT"
+  },
+  lastKeyWasOperation: false,
+  lastKeyWasDot: false,
+  clearDisplay: function() {
     $('#result').html("0");    
   },
-
   deleteCharFromPreview: function() {
-    var preview = $('#preview').html();
-    $('#preview').html(preview.slice(0, preview.length-1));
+    var preview = $('#result').html();
+    $('#result').html(preview.slice(0, preview.length-1));
   },
   calculateResult: function() {
-    $('#result').html(eval($('#preview').html()));
+    var result = eval($('#result').html()) + '';
+    $('#result').html(result);
   },
-  handleKeyPress: function(key) {
-    switch($(key).text()) {
-    case "AC":
-      Calci.clearPreview();
+  handleInput: function(val) {
+    if (val == 'X') {
+      val = '*';
+    }
+
+    switch(val) {
+    case Calci.constants.ac:
+      Calci.clearDisplay();
       break;
-    case "DEL":
+    case Calci.constants.del:
       Calci.deleteCharFromPreview();
       break;
-    case "=":
+    case '=':
       Calci.calculateResult();
       break;
     default:
-      $('#preview').html(
-        $('#preview').html() + $(key).text()
-      );
+      if(val == '.' && Calci.lastKeyWasDot) {
+        // Nothing to do. Ignore the current dot
+      } else {
+        if((['+', '-', '*', '/'].indexOf(val) != -1) && Calci.lastKeyWasOperation) {
+          Calci.deleteCharFromPreview();
+        }
+        $('#result').html(
+          $('#result').html() + val
+        );
+      }
     }
-  }
+
+    if (val == '.') {
+      Calci.lastKeyWasDot = true;
+    } else {
+      Calci.lastKeyWasDot = false;
+    }
+
+    if (['+', '-', '*', '/'].indexOf(val) == -1) {
+      Calci.lastKeyWasOperation = false;
+    } else {
+      Calci.lastKeyWasOperation = true;
+    }
+  },
+  watchKeyClick: function() {
+    $('.key').click(function(event){
+      Calci.handleInput($(this).text());
+    });
+  },
+  handleInputFunctionWrapper: function(val) {
+    return function() {
+      Calci.handleInput(val);
+      var eleId;
+      switch(val) {
+      case '+':
+        eleId = '#key-' + Calci.constants.plus;
+        break;
+      case '.':
+        eleId = '#key-' + Calci.constants.dot;
+        break;
+      case '-':
+        eleId = '#key-' + Calci.constants.minus;
+        break;
+      case '/':
+        eleId = '#key-' + Calci.constants.division;
+        break;
+      case '*':
+        eleId = '#key-' + Calci.constants.multiply;
+        break;
+      case '=':
+        eleId = '#key-' + Calci.constants.eql;
+        break;
+      default:
+        eleId = '#key-' + val;
+      }
+      $(eleId).addClass('active');
+      setTimeout(function(){ $(eleId).removeClass('active'); }, 200);
+    }
+  },
+  watchKeyPress: function() {
+    var keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/'];
+    for(var i = 0; i < keys.length; i++) {
+      $(document).bind('keyup', keys[i], Calci.handleInputFunctionWrapper(keys[i]));
+    }
+    $(document).bind('keyup', "esc", Calci.handleInputFunctionWrapper("AC"));
+    $(document).bind('keyup', "backspace", Calci.handleInputFunctionWrapper("DEL"));
+    $(document).bind('keyup', "return", Calci.handleInputFunctionWrapper("="));
+  }//,
+  // watchKeyPress: function() {
+  //   var keys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '-', '*', '/'];
+  //   for(var i = 0; i < keys.length; i++) {
+  //     $(document).bind('keyup', keys[i], function() {
+  //       Calci.handleInput(keys[i]);
+  //     });
+  //   }
+  // }
 };
 
 $(document).ready(function() {
-  $('.key').click(function(event){
-   Calci.handleKeyPress(this);
-  });
+  Calci.watchKeyClick();
+  Calci.watchKeyPress();
 });
