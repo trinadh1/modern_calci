@@ -4,25 +4,25 @@
   transform: translateY(-50%); }
 
 html {
-  background-color: #e74c3c; }
+  background-color: black; }
   html body {
     height: 100vh;
-    background-image: url("../images/maths_careers.png");
-    background-size: cover; }
+  
+   }
   html #calculator {
     width: 48vmin;
-    height: 84vmin;
-    background-color: #1abc9c;
-    color: #e74c3c; }
+    height: 77vmin;
+    background-color: #2ecc71;
+    color: #ecf0f1; }
     html #calculator #result {
-      background-color: #2c3e50;
-      height: 25vmin;
+      background-color: black;
+      height: 16vmin;
       text-align: right;
       line-height: 16vmin;
       font-size: 8vmin;
       padding: 0 2vmin; }
     html #calculator #preview {
-      background-color: #7f8c8d;
+      background-color: red;
       height: 8vmin;
       text-align: right;
       line-height: 8vmin;
@@ -32,21 +32,21 @@ html {
       padding: 0;
       height: 12vmin;
       width: 12vmin;
-      background-color: #34495e;
+      background-color: #2ecc71;
       box-sizing: border-box;
       text-align: center;
       line-height: 12vmin;
       font-size: 3vmin;
-      border-radius: 10px; }
+      border-radius: 20px; }
       html #calculator .key#equals {
         width: 24vmin; }
       html #calculator .key#plus {
         height: 24vmin;
         line-height: 24vmin; }
       html #calculator .key:hover {
-        background-color: #1abc9c; }
+        background-color: #95a5a6; }
       html #calculator .key:active {
-        background-color: #17a689; }
+        background-color: #7f3d9b; }
     html #calculator .key-group {
       padding: 0; }
 
